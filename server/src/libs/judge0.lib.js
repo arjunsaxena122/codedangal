@@ -10,7 +10,7 @@ const getJudge0LanguageId = (language) => {
   };
 
   let caps = language;
-  language = caps[0].toUpperCase() + caps.slice(1, caps.length);
+  language = caps[0].toUpperCase() + caps.slice(1, caps.length).toLowerCase();
   return languageId[language];
 };
 
