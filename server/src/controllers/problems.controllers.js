@@ -162,7 +162,29 @@ const deleteProblem = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "code problem deleted successfully"));
 });
 
-const getSolvedProblemByUser = asyncHandler(async (req, res) => {});
+const getSolvedProblemByUser = asyncHandler(async (req, res) => {
+  const problemId = req.params;
+
+  const allProblem = await db.problem.findMany({
+    where: {
+      solvedProblem: {
+        userId: req?.user?.id,
+        problemId,
+      },
+    },
+    include: {
+      where: {
+        userId: req?.user?.id,
+      },
+    },
+  });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, "fetched user all solved code problem", allProblem)
+    );
+});
 
 export {
   createProblem,
