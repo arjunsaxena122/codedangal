@@ -19,8 +19,10 @@ app.use(cors(corsOptions));
 // Routes
 import userRouter from "./routes/user.routes.js";
 import userProblems from "./routes/problems.routes.js"
+import execCodeRouter from "./routes/execCode.routes.js"
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/problems", userProblems);
+app.use("/api/v1/exce-code", execCodeRouter);
 
 export default app;

@@ -4,7 +4,7 @@ import {
   pollBatchResults,
   submitBatch,
 } from "../libs/judge0.lib.js";
-import db from "../db/db.js";
+import { db } from "../db/db.js";
 
 const createProblem = asyncHandler(async (req, res) => {
   const {
@@ -61,7 +61,7 @@ const createProblem = asyncHandler(async (req, res) => {
     const tokens = submissionResult.map((res) => res.token);
 
     const results = await pollBatchResults(tokens);
-
+    console.log("resuls ======== problem", results);
     for (let i = 0; i < results.length; i++) {
       const result = results[i];
 
@@ -93,13 +93,74 @@ const createProblem = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllProblem = asyncHandler(async (req, res) => {});
+const getAllProblem = asyncHandler(async (req, res) => {
+  const userProblems = await db.problem.findMany();
 
-const getProblem = asyncHandler(async (req, res) => {});
+  console.log(`get all problem ${userProblems}`);
 
-const updateProblem = asyncHandler(async (req, res) => {});
+  if (!userProblems) {
+    return new ApiError(404, "No Problem found");
+  }
 
-const deleteProblem = asyncHandler(async (req, res) => {});
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "fetched all problems successfully"));
+});
+
+const getProblem = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const specificProblem = await db.problem.findUnique({
+    where: { id },
+  });
+
+  if (!specificProblem) {
+    throw new ApiError(404, "code problem not found");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "code problem found successfully"));
+});
+
+const updateProblem = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  // const updatedProblem = await db.problem.update({
+  //   where: { id },
+  //   data: {
+  //     title,
+  //     description,
+  //     difficulty,
+  //     tags,
+  //     examples,
+  //     constraints,
+  //     testCases,
+  //     codeSnippets,
+  //     referenceSolution,
+  //   },
+  // });
+});
+
+const deleteProblem = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (req?.user?.role !== "ADMIN") {
+    throw new ApiError(403, "permission denied to delete problem");
+  }
+
+  const deleteSpecificProblem = await db.problem.delete({
+    where: { id },
+  });
+
+  if (!deleteSpecificProblem) {
+    throw new ApiError(400, "Internal server issue to delete this problem");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "code problem deleted successfully"));
+});
 
 const getSolvedProblemByUser = asyncHandler(async (req, res) => {});
 
