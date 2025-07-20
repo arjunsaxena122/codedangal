@@ -1,0 +1,16 @@
+services:
+  postgres:
+    container_name: codedangal
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${DOCKER_COMPOSE_POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${DOCKER_COMPOSE_POSTGRES_PASSWORD}
+      - POSTGRES_DB=${DOCKER_COMPOSE_POSTGRES_DB}
+    volumes:
+      - codedangal_psql_data:/var/lib/postgresql/data
+
+volumes:
+  codedangal_psql_data: 
+  

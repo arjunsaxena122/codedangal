@@ -14,8 +14,17 @@ const options = {
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credential: true,
 };
-
 app.use(cors(options));
+
+
+// Import Routers
+import healthRouter from "./routes/health.route"
+import authRouter from "./routes/auth.route"
+
+app.use("/api/v1",healthRouter)
+app.use("/api/v1/auth",authRouter)
+
+
 
 // Custom Error Middleware
 app.use(customErrorHandler);
