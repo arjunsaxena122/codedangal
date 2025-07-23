@@ -4,6 +4,8 @@ import { ApiError } from "../utils/api-error";
 import prisma from "../db/db";
 import jwt from "jsonwebtoken";
 import { env } from "../config/config";
+import { User } from "../generated/prisma";
+import { Request } from "express";
 
 const randString = () => {
   return crypto.randomBytes(32).toString("hex");
@@ -49,3 +51,7 @@ export const generateAccessAndRefreshToken = async (
 
   return { accessToken, refreshToken };
 };
+
+export interface IRequestUser extends Request {
+  user?: User;
+}

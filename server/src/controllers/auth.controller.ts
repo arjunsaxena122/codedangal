@@ -6,6 +6,7 @@ import prisma from "../db/db";
 import {
   generateAccessAndRefreshToken,
   hashedPassword,
+  IRequestUser,
   isCheckCorrectPassword,
 } from "../helper/auth.helper";
 import { env } from "../config/config";
@@ -111,19 +112,19 @@ const login = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(200, "user login successfully"));
 });
 
-const logout = asyncHandler(async (req: Request, res: Response) => {
+const logout = asyncHandler(async (req: IRequestUser, res: Response) => {
   if (!req.user) {
     throw new ApiError(404, "request user not exist");
   }
 
-  const { id } = req.user;
+  const userID = req.user;
 
-  if (!id) {
+  if (!userID.id) {
     throw new ApiError(404, "userID not found");
   }
 
   const user = await prisma.user.findUnique({
-    where: { id },
+    where: { id: userID.id },
   });
 
   if (!user) {
@@ -131,7 +132,7 @@ const logout = asyncHandler(async (req: Request, res: Response) => {
   }
 
   await prisma.user.update({
-    where: { id },
+    where: { id: user.id },
     data: { refreshToken: null },
   });
 
@@ -142,6 +143,7 @@ const logout = asyncHandler(async (req: Request, res: Response) => {
       | "lax"
       | "strict",
     maxAge: 1000 * 60 * 60,
+    expires: new Date(0),
   };
 
   const refreshOptions = {
@@ -151,6 +153,7 @@ const logout = asyncHandler(async (req: Request, res: Response) => {
       | "lax"
       | "strict",
     maxAge: 1000 * 60 * 60 * 24,
+    expires: new Date(0),
   };
 
   return res

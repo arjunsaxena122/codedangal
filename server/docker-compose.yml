@@ -12,5 +12,4 @@ services:
       - codedangal_psql_data:/var/lib/postgresql/data
 
 volumes:
-  codedangal_psql_data: 
-  
+  codedangal_psql_data:
