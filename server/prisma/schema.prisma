@@ -56,10 +56,10 @@ model User {
 
 model Problem {
   id                 String     @id @default(cuid())
-  userId             String     @unique
-  title              String
+  userId             String
+  title              String     @unique
   description        String
-  difficulty         Difficulty 
+  difficulty         Difficulty
   tags               String[]
   examples           Json
   constraints        String
