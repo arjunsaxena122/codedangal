@@ -41,6 +41,7 @@ const register = asyncHandler(async (req: Request, res: Response) => {
       id: true,
       email: true,
       isEmailVerified: true,
+      role: true,
     },
   });
 
@@ -56,7 +57,7 @@ const register = asyncHandler(async (req: Request, res: Response) => {
 const login = asyncHandler(async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
 
-  if (!email || !password || !username) {
+  if (!email || !password) {
     throw new ApiError(400, "Please fill the required fields");
   }
 

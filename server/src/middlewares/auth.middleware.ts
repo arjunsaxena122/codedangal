@@ -1,18 +1,19 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { ApiError } from "../utils/api-error";
 import jwt from "jsonwebtoken";
 import { env } from "../config/config";
 import prisma from "../db/db";
+import { IRequestUser } from "../helper/auth.helper";
 
 const authVerifyJwt = async (
-  req: Request,
+  req: IRequestUser,
   res: Response,
   next: NextFunction,
 ) => {
   try {
     const token =
       req?.cookies?.accessToken ||
-      req.header("authorization")?.replace("Bearer", "").trim();
+      req.header("authorization")?.replace("Bearer ","").trim();
 
     if (!token) {
       throw new ApiError(404, "ERROR: token not found");
@@ -38,7 +39,9 @@ const authVerifyJwt = async (
     req.user = user;
     next();
   } catch (err) {
-    next(new ApiError(403, "ERROR: ACCESS DENIED"));
+    next(
+      new ApiError(403, "ERROR: ACCESS DENIED, You are not authroised user"),
+    );
   }
 };
 

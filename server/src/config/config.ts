@@ -14,6 +14,8 @@ const envSchema = z.object({
   ACCESS_TOKEN_EXPIRY: z.string(),
   REFRESH_TOKEN_KEY: z.string(),
   REFRESH_TOKEN_EXPIRY: z.string(),
+  SULU_JUDGE0_API_KEY: z.string(),
+  SULU_JUDGE0_URL : z.string()
 });
 
 const createEnv = (env: NodeJS.ProcessEnv) => {
