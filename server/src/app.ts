@@ -3,7 +3,6 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { customErrorHandler } from "./middlewares/error.middleware";
 
-
 const app: Application = express();
 
 app.use(express.json({ limit: "16kb" }));
@@ -43,11 +42,12 @@ app.use(cors(options));
 import healthRouter from "./routes/health.route";
 import authRouter from "./routes/auth.route";
 import problemRouter from "./routes/problem.route";
-
+import executeRouter from "./routes/execute.route";
 
 app.use("/api/v1/health", healthRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/problem", problemRouter);
+app.use("/api/v1/execute", executeRouter);
 
 // Custom Error Middleware
 app.use(customErrorHandler);

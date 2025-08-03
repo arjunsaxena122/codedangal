@@ -24,18 +24,20 @@ const getLanguageId = async (language: string) => {
   return langId;
 };
 
-const createSubmissionBatch = async (submission: string) => {
+const createSubmissionBatch = async (submission:any) => {
+  // console.log(submission)
   const { data } = await axios.post(
     `${env.SULU_JUDGE0_URL}/submissions/batch`,
     { submissions: submission },
     options,
   );
-
+  // console.log(data)
   // ? submission tokens
   return data;
 };
 
 const getSubmissionResult = async (tokens: string[]) => {
+  // console.log(tokens.join(","))
   type submissionResult = {
     status: {
       id: number;
@@ -59,7 +61,7 @@ const getSubmissionResult = async (tokens: string[]) => {
 
 
     const results = data?.submissions;
-    console.log(results);
+    // console.log(results);
 
     const isAllDone = results?.every(
       (result: submissionResult) =>
