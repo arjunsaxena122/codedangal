@@ -43,11 +43,13 @@ import healthRouter from "./routes/health.route";
 import authRouter from "./routes/auth.route";
 import problemRouter from "./routes/problem.route";
 import executeRouter from "./routes/execute.route";
+import submissionRouter from "./routes/submission.route";
 
 app.use("/api/v1/health", healthRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/problem", problemRouter);
 app.use("/api/v1/execute", executeRouter);
+app.use("/api/v1/submission", submissionRouter);
 
 // Custom Error Middleware
 app.use(customErrorHandler);

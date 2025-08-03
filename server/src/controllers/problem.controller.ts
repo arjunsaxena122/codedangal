@@ -186,7 +186,33 @@ const getProblemById = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const getSolvedProblem = asyncHandler(
-  async (req: Request, res: Response) => {},
+  async (req: IRequestUser, res: Response) => {
+    if (!req.user || !req.user.id) {
+      throw new ApiError(401, "Request userId not found, Unauthroised user");
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id.toString() },
+    });
+
+    if (!user) {
+      throw new ApiError(404, "user not found");
+    }
+
+    const solvedProblem = await prisma.problemSolved.findMany({
+      where: {
+        userId: req.user.id,
+      },
+    });
+
+    if (!solvedProblem) {
+      throw new ApiError(404, `No problem solved by ${user?.email}`);
+    }
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, "Solved problem", solvedProblem));
+  },
 );
 
 const updateProblemById = asyncHandler(
