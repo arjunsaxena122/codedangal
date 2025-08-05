@@ -4,7 +4,7 @@ import {
   deleteProblemById,
   getAllProblem,
   getProblemById,
-  getSolvedProblem,
+  getAllSolvedProblemByUser,
   updateProblemById,
 } from "../controllers/problem.controller";
 import { authVerifyJwt } from "../middlewares/auth.middleware";
@@ -38,7 +38,7 @@ router
   .get(
     authVerifyJwt,
     rbac([AuthRolesEnum.ADMIN, AuthRolesEnum.USER]),
-    getSolvedProblem,
+    getAllSolvedProblemByUser,
   );
 
 router

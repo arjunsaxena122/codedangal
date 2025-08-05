@@ -94,11 +94,16 @@ const executeCode = asyncHandler(
 
       let allPassed = true;
 
+      console.log(results)
+
       const detailedResult = results.map((result: Iresults, i: number) => {
         const stdout = result?.stdout?.trim();
         const expected_output = expectedOutput[i]?.trim();
+        console.log("stdout",stdout)
+        console.log("expected_output",expected_output)
 
-        const passed = stdout === expected_output;
+
+        const passed = (stdout === expected_output);
 
         if (!passed) allPassed = false;
 
@@ -155,8 +160,10 @@ const executeCode = asyncHandler(
         },
       });
 
+      console.log(allPassed)
+
       if (allPassed) {
-        await prisma.problemSolved.upsert({
+        const solvedProblem = await prisma.problemSolved.upsert({
           where: {
             userId_problemId: {
               userId: req.user?.id,
@@ -169,6 +176,9 @@ const executeCode = asyncHandler(
             problemId,
           },
         });
+
+        console.log(solvedProblem)
+
       }
 
       const testCaseResult = detailedResult.map((result: Iresults) => ({

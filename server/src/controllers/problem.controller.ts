@@ -185,7 +185,8 @@ const getProblemById = asyncHandler(async (req: Request, res: Response) => {
     );
 });
 
-const getSolvedProblem = asyncHandler(
+// Todo : Baad main dekhna hai 
+const getAllSolvedProblemByUser = asyncHandler(
   async (req: IRequestUser, res: Response) => {
     if (!req.user || !req.user.id) {
       throw new ApiError(401, "Request userId not found, Unauthroised user");
@@ -199,19 +200,26 @@ const getSolvedProblem = asyncHandler(
       throw new ApiError(404, "user not found");
     }
 
-    const solvedProblem = await prisma.problemSolved.findMany({
+    const problem = await prisma.problem.findMany({
       where: {
         userId: req.user.id,
       },
+      include: {
+        ProblemSolved: {
+          where: {
+            userId: req.user.id,
+          },
+        },
+      },
     });
 
-    if (!solvedProblem) {
+    if (!problem) {
       throw new ApiError(404, `No problem solved by ${user?.email}`);
     }
 
     return res
       .status(200)
-      .json(new ApiResponse(200, "Solved problem", solvedProblem));
+      .json(new ApiResponse(200, "Solved problem", problem));
   },
 );
 
@@ -433,7 +441,7 @@ export {
   createProblem,
   getAllProblem,
   getProblemById,
-  getSolvedProblem,
+  getAllSolvedProblemByUser,
   updateProblemById,
   deleteProblemById,
 };
